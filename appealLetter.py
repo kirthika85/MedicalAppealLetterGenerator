@@ -113,10 +113,7 @@ if st.button("Generate Appeal Letter"):
             
             Please use the following patient details at the beginning of the letter:
             Patient Name: {patient_info['name']}
-            Patient Address: {patient_info['address']}
-            Patient Phone: {patient_info['phone']}
-            Patient Email: {patient_info['email']}
-
+            
             Start the letter with the patient's full name and address, followed by the current date ({current_date}).
             """
 
