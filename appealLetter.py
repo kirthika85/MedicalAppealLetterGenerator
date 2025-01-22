@@ -15,13 +15,17 @@ def extract_text_from_pdf(pdf_file):
 
 # Initialize OpenAI GPT-4 LLM with LangChain
 def initialize_agent(api_key):
-    llm = OpenAI(
-        temperature=0.7,
-        model="gpt-4",
-        openai_api_key=api_key
-    )
-    memory = ConversationBufferMemory()
-    return ConversationChain(llm=llm, memory=memory)
+    try:
+        llm = OpenAI(
+            temperature=0.7,
+            model="gpt-4",
+            openai_api_key=api_key
+        )
+        memory = ConversationBufferMemory()
+        return ConversationChain(llm=llm, memory=memory)
+    except Exception as e:
+        st.error(f"Error initializing OpenAI agent: {e}")
+        return None
 
 # Streamlit app
 st.title("GPT-4 Medical Claim Appeal Generator")
@@ -65,59 +69,65 @@ if st.button("Generate Appeal Letter"):
         st.write("Initializing AI agent with GPT-4...")
         agent = initialize_agent(api_key)
 
-        # Task prompts
-        appeal_prompt = f"""
-        Generate a professional appeal letter based on these inputs:
-        1. Explanation of Benefits (EOB):
-        {eob_text}
+        if agent is None:
+            st.error("Failed to initialize the AI agent. Please check your OpenAI API key.")
+        else:
+            # Task prompts
+            appeal_prompt = f"""
+            Generate a professional appeal letter based on these inputs:
+            1. Explanation of Benefits (EOB):
+            {eob_text}
 
-        2. Medical Records:
-        {medical_text}
+            2. Medical Records:
+            {medical_text}
 
-        3. Denial Letter:
-        {denial_text}
+            3. Denial Letter:
+            {denial_text}
 
-        The appeal letter should:
-        - Use a polite and professional tone.
-        - Clearly state the reason for the appeal.
-        - Explain the medical necessity of the procedures.
-        - Suggest why the denial reason should be reconsidered.
-        """
-        
-        summarize_prompt = f"""
-        Summarize the key details from the following medical records:
-        {medical_text}
-        """
+            The appeal letter should:
+            - Use a polite and professional tone.
+            - Clearly state the reason for the appeal.
+            - Explain the medical necessity of the procedures.
+            - Suggest why the denial reason should be reconsidered.
+            """
+            
+            summarize_prompt = f"""
+            Summarize the key details from the following medical records:
+            {medical_text}
+            """
 
-        rebuttal_prompt = f"""
-        The following denial reason was provided:
-        {denial_text}
+            rebuttal_prompt = f"""
+            The following denial reason was provided:
+            {denial_text}
 
-        Suggest improvements to the rebuttal to strengthen the appeal argument.
-        """
+            Suggest improvements to the rebuttal to strengthen the appeal argument.
+            """
 
-        with st.spinner("Generating outputs with GPT-4..."):
-            # Generate results
-            appeal_letter = agent.run(appeal_prompt)
-            medical_summary = agent.run(summarize_prompt)
-            rebuttal_suggestions = agent.run(rebuttal_prompt)
+            with st.spinner("Generating outputs with GPT-4..."):
+                # Generate results
+                try:
+                    appeal_letter = agent.run(appeal_prompt)
+                    medical_summary = agent.run(summarize_prompt)
+                    rebuttal_suggestions = agent.run(rebuttal_prompt)
 
-        # Display results
-        st.subheader("Generated Appeal Letter:")
-        st.text_area("Appeal Letter", appeal_letter, height=400)
+                    # Display results
+                    st.subheader("Generated Appeal Letter:")
+                    st.text_area("Appeal Letter", appeal_letter, height=400)
 
-        st.subheader("Medical Records Summary:")
-        st.text_area("Summary", medical_summary, height=200)
+                    st.subheader("Medical Records Summary:")
+                    st.text_area("Summary", medical_summary, height=200)
 
-        st.subheader("Rebuttal Improvement Suggestions:")
-        st.text_area("Suggestions", rebuttal_suggestions, height=200)
+                    st.subheader("Rebuttal Improvement Suggestions:")
+                    st.text_area("Suggestions", rebuttal_suggestions, height=200)
 
-        # Allow user to download the appeal letter
-        st.download_button(
-            label="Download Appeal Letter",
-            data=appeal_letter,
-            file_name="appeal_letter.txt",
-            mime="text/plain"
-        )
+                    # Allow user to download the appeal letter
+                    st.download_button(
+                        label="Download Appeal Letter",
+                        data=appeal_letter,
+                        file_name="appeal_letter.txt",
+                        mime="text/plain"
+                    )
+                except Exception as e:
+                    st.error(f"Error generating outputs: {e}")
     else:
         st.error("Please upload all required documents.")
