@@ -21,12 +21,11 @@ def extract_patient_info(medical_text):
     phone = re.search(r"Phone Number:\s*(.*)", medical_text)
     email = re.search(r"Email:\s*(.*)", medical_text)
 
-    # If no matches, return empty strings
     return {
-        "name": name.group(1) if name else "Unknown",
-        "address": address.group(1) if address else "Unknown",
-        "phone": phone.group(1) if phone else "Unknown",
-        "email": email.group(1) if email else "Unknown"
+        "name": name.group(1) if name else "[Patient Name]",
+        "address": address.group(1) if address else "[Patient Address]",
+        "phone": phone.group(1) if phone else "[Patient Phone]",
+        "email": email.group(1) if email else "[Patient Email]"
     }
 
 # Initialize GPT-4 Chat Model with LangChain
@@ -115,6 +114,8 @@ if st.button("Generate Appeal Letter"):
             Patient Address: {patient_info['address']}
             Patient Phone: {patient_info['phone']}
             Patient Email: {patient_info['email']}
+
+            Start the letter with the patient's details and today's date.
             """
 
             summarize_prompt = f"""
