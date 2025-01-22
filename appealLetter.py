@@ -44,10 +44,15 @@ def initialize_agent(api_key):
         st.error(f"Error initializing OpenAI agent: {e}")
         return None
 
+# Display logo at the top-left corner
+st.set_page_config(page_title="Medical Claim Appeal Generator", page_icon="🩺", layout="wide")
+st.image("Mool.png", width=150)
+
 # Streamlit app
 st.title("Medical Claim Appeal Generator")
 st.write("Generate medical claim appeal letters and summaries. Upload your documents to get started.")
 current_date = datetime.now().strftime("%A, %B %d, %Y")
+
 
 # Sidebar for OpenAI API Key input
 api_key = st.sidebar.text_input(
