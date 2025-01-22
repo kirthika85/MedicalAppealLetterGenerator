@@ -100,7 +100,7 @@ if st.button("Generate Appeal Letter"):
             patient_info = extract_patient_info(medical_text)
 
             # Task prompts
-            appeal_prompt = f"""
+            appeal_prompt=f"""
             Generate a professional appeal letter based on these inputs:
             1. Explanation of Benefits (EOB):
             {eob_text}
