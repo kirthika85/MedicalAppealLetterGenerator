@@ -29,7 +29,7 @@ def initialize_agent(api_key):
 
 # Streamlit app
 st.title("GPT-4 Medical Claim Appeal Generator")
-st.write("Generate medical claim appeal letters, summaries, and suggestions using GPT-4. Upload your documents to get started.")
+st.write("Generate medical claim appeal letters and summaries using GPT-4. Upload your documents to get started.")
 
 # Sidebar for OpenAI API Key input
 api_key = st.sidebar.text_input(
@@ -96,19 +96,11 @@ if st.button("Generate Appeal Letter"):
             {medical_text}
             """
 
-            rebuttal_prompt = f"""
-            The following denial reason was provided:
-            {denial_text}
-
-            Suggest improvements to the rebuttal to strengthen the appeal argument.
-            """
-
             with st.spinner("Generating outputs with GPT-4..."):
                 # Generate results
                 try:
                     appeal_letter = agent.run(appeal_prompt)
                     medical_summary = agent.run(summarize_prompt)
-                    rebuttal_suggestions = agent.run(rebuttal_prompt)
 
                     # Display results
                     st.subheader("Generated Appeal Letter:")
@@ -116,9 +108,6 @@ if st.button("Generate Appeal Letter"):
 
                     st.subheader("Medical Records Summary:")
                     st.text_area("Summary", medical_summary, height=200)
-
-                    st.subheader("Rebuttal Improvement Suggestions:")
-                    st.text_area("Suggestions", rebuttal_suggestions, height=200)
 
                     # Allow user to download the appeal letter
                     st.download_button(
