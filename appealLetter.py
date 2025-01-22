@@ -46,7 +46,7 @@ def initialize_agent(api_key):
 
 # Streamlit app
 st.title("Medical Claim Appeal Generator")
-st.write("Generate medical claim appeal letters and summaries using LLM. Upload your documents to get started.")
+st.write("Generate medical claim appeal letters and summaries. Upload your documents to get started.")
 current_date = datetime.now().strftime("%A, %B %d, %Y")
 
 # Sidebar for OpenAI API Key input
@@ -84,7 +84,7 @@ if st.button("Generate Appeal Letter"):
         st.error("Please enter your OpenAI API Key in the sidebar.")
     elif eob_file and medical_file and denial_file:
         # Initialize the AI agent with the user's API key
-        st.write("Initializing AI agent with LLM...")
+        st.write("Initializing Mool AI agent...")
         agent = initialize_agent(api_key)
 
         if agent is None:
@@ -122,7 +122,7 @@ if st.button("Generate Appeal Letter"):
             {medical_text}
             """
 
-            with st.spinner("Generating outputs with LLM..."):
+            with st.spinner("Generating outputs..."):
                 # Generate results
                 try:
                     appeal_letter = agent.run(appeal_prompt)
