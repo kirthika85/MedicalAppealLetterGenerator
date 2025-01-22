@@ -1,8 +1,7 @@
 import streamlit as st
 from PyPDF2 import PdfReader
-from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
-from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 
 # Function to extract text from uploaded PDFs
@@ -13,10 +12,11 @@ def extract_text_from_pdf(pdf_file):
         text += page.extract_text()
     return text
 
-# Initialize OpenAI GPT-4 LLM with LangChain
+# Initialize GPT-4 Chat Model with LangChain
 def initialize_agent(api_key):
     try:
-        llm = OpenAI(
+        # Use the correct ChatOpenAI model
+        llm = ChatOpenAI(
             temperature=0.7,
             model="gpt-4",
             openai_api_key=api_key
