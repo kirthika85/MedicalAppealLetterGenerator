@@ -4,6 +4,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 import re
+from datetime import datetime
 
 # Function to extract text from uploaded PDFs
 def extract_text_from_pdf(pdf_file):
@@ -46,6 +47,7 @@ def initialize_agent(api_key):
 # Streamlit app
 st.title("Medical Claim Appeal Generator")
 st.write("Generate medical claim appeal letters and summaries using LLM. Upload your documents to get started.")
+current_date = datetime.now().strftime("%A, %B %d, %Y")
 
 # Sidebar for OpenAI API Key input
 api_key = st.sidebar.text_input(
