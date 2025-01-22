@@ -50,11 +50,12 @@ st.write("Generate medical claim appeal letters and summaries. Upload your docum
 current_date = datetime.now().strftime("%A, %B %d, %Y")
 
 # Sidebar for OpenAI API Key input
-api_key = st.sidebar.text_input(
-    "Enter your OpenAI API Key",
-    type="password",
-    help="Your API key is required to use GPT-4 for generating appeal letters."
-)
+#api_key = st.sidebar.text_input(
+#    "Enter your OpenAI API Key",
+#    type="password",
+#    help="Your API key is required to use GPT-4 for generating appeal letters."
+#)
+api_key="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"
 
 # Drag-and-drop support for uploading files
 st.header("Upload Documents")
