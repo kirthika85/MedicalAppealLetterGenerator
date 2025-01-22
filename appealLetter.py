@@ -46,7 +46,7 @@ def initialize_agent(api_key):
 
 # Display logo at the top-left corner
 st.set_page_config(page_title="Medical Claim Appeal Generator", page_icon="🩺", layout="wide")
-#st.image("Mool.png", width=150)
+#st.image("Mool.png", width=250)
 
 col1, col2 = st.columns([1, 6])
 with col1:
