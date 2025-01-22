@@ -3,6 +3,7 @@ from PyPDF2 import PdfReader
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
+import re
 
 # Function to extract text from uploaded PDFs
 def extract_text_from_pdf(pdf_file):
@@ -11,6 +12,22 @@ def extract_text_from_pdf(pdf_file):
     for page in reader.pages:
         text += page.extract_text()
     return text
+
+# Function to extract patient details from the medical records text
+def extract_patient_info(medical_text):
+    # Using regex to extract the patient's name, address, phone number, and email
+    name = re.search(r"Patient Name:\s*(.*)", medical_text)
+    address = re.search(r"Address:\s*(.*)", medical_text)
+    phone = re.search(r"Phone Number:\s*(.*)", medical_text)
+    email = re.search(r"Email:\s*(.*)", medical_text)
+
+    # If no matches, return empty strings
+    return {
+        "name": name.group(1) if name else "Unknown",
+        "address": address.group(1) if address else "Unknown",
+        "phone": phone.group(1) if phone else "Unknown",
+        "email": email.group(1) if email else "Unknown"
+    }
 
 # Initialize GPT-4 Chat Model with LangChain
 def initialize_agent(api_key):
@@ -28,8 +45,8 @@ def initialize_agent(api_key):
         return None
 
 # Streamlit app
-st.title("GPT-4 Medical Claim Appeal Generator")
-st.write("Generate medical claim appeal letters and summaries using GPT-4. Upload your documents to get started.")
+st.title("Medical Claim Appeal Generator")
+st.write("Generate medical claim appeal letters and summaries using LLM. Upload your documents to get started.")
 
 # Sidebar for OpenAI API Key input
 api_key = st.sidebar.text_input(
@@ -72,6 +89,9 @@ if st.button("Generate Appeal Letter"):
         if agent is None:
             st.error("Failed to initialize the AI agent. Please check your OpenAI API key.")
         else:
+            # Extract patient information from medical records
+            patient_info = extract_patient_info(medical_text)
+
             # Task prompts
             appeal_prompt = f"""
             Generate a professional appeal letter based on these inputs:
@@ -89,8 +109,14 @@ if st.button("Generate Appeal Letter"):
             - Clearly state the reason for the appeal.
             - Explain the medical necessity of the procedures.
             - Suggest why the denial reason should be reconsidered.
-            """
             
+            Please use the following patient details:
+            Patient Name: {patient_info['name']}
+            Patient Address: {patient_info['address']}
+            Patient Phone: {patient_info['phone']}
+            Patient Email: {patient_info['email']}
+            """
+
             summarize_prompt = f"""
             Summarize the key details from the following medical records:
             {medical_text}
