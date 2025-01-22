@@ -46,10 +46,20 @@ def initialize_agent(api_key):
 
 # Display logo at the top-left corner
 st.set_page_config(page_title="Medical Claim Appeal Generator", page_icon="🩺", layout="wide")
-st.image("Mool.png", width=150)
+#st.image("Mool.png", width=150)
+
+col1, col2 = st.columns([1, 6])
+with col1:
+    st.image("Mool.png", width=150)
+
+with col2:
+    st.markdown(
+        "<h1 style='margin-top: 10px;'>Medical Claim Appeal Generator</h1>",
+        unsafe_allow_html=True
+    )
 
 # Streamlit app
-st.title("Medical Claim Appeal Generator")
+#st.title("Medical Claim Appeal Generator")
 st.write("Generate medical claim appeal letters and summaries. Upload your documents to get started.")
 current_date = datetime.now().strftime("%A, %B %d, %Y")
 
