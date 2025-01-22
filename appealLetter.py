@@ -82,7 +82,7 @@ if st.button("Generate Appeal Letter"):
         st.error("Please enter your OpenAI API Key in the sidebar.")
     elif eob_file and medical_file and denial_file:
         # Initialize the AI agent with the user's API key
-        st.write("Initializing AI agent with GPT-4...")
+        st.write("Initializing AI agent with LLM...")
         agent = initialize_agent(api_key)
 
         if agent is None:
@@ -109,13 +109,13 @@ if st.button("Generate Appeal Letter"):
             - Explain the medical necessity of the procedures.
             - Suggest why the denial reason should be reconsidered.
             
-            Please use the following patient details:
+            Please use the following patient details at the beginning of the letter:
             Patient Name: {patient_info['name']}
             Patient Address: {patient_info['address']}
             Patient Phone: {patient_info['phone']}
             Patient Email: {patient_info['email']}
 
-            Start the letter with the patient's details and today's date.
+            Start the letter with the patient's full name and address, followed by the current date ({current_date}).
             """
 
             summarize_prompt = f"""
@@ -123,7 +123,7 @@ if st.button("Generate Appeal Letter"):
             {medical_text}
             """
 
-            with st.spinner("Generating outputs with GPT-4..."):
+            with st.spinner("Generating outputs with LLM..."):
                 # Generate results
                 try:
                     appeal_letter = agent.run(appeal_prompt)
