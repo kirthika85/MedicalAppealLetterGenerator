@@ -137,6 +137,9 @@ if st.button("Generate Appeal Letter"):
             Summarize the key details from the following medical records:
             {medical_text}
             """
+            # Display the appeal_prompt
+            st.subheader("Appeal Prompt:")
+            st.text_area("Prompt sent to OpenAI", appeal_prompt, height=400)
 
             with st.spinner("Generating outputs..."):
                 # Generate results
